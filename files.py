@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import json, os, yaml, logging, traceback
+import json, os, yaml, logging, traceback, shutil
 
 def read_yaml(yaml_file: str):
     '''Read YAML.'''
@@ -22,5 +22,5 @@ def copy_to(f: str, t: str):
     '''Copy file from one plcae to another.'''
     try:
         shutil.copyfile(f, t)
-    except Exception():
+    except Exception:
         logging.error("Error while copy file: %s" % traceback.format_exc())
