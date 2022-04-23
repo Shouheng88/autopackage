@@ -3,6 +3,7 @@
 
 import os, shutil, logging
 from assemble import assemble
+from diffuse import diff_apk
 # from shutil import *
 
 # The path under witch to find the APKs. 
@@ -44,16 +45,15 @@ def config_logging(filename: str = 'app.log'):
     logging.basicConfig(filename=filename, filemode='a', level=logging.DEBUG, format=log_format, datefmt=date_format)
     logging.FileHandler(filename=filename, encoding='utf-8')
 
+def _assemble_internal(is32Bit: bool):
+    '''Assemble APK and others.'''
+    info = assemble(True)
+    diff_apk(info)
+
 if __name__ == "__main__":
     config_logging()
-    # Read file content from file path.
-    assemble(True)
-    # content = read_file_content(BUILD_GRADLE_FILE_PATH)
-    # Build prod 32 bit release.
-    # assemble_32_bit_apk()
-    # Build prod 64 bit release.
-    # assemble_63_bit_apk()
-    # Copy mapping file to given destination.
+    _assemble_internal(True)
+    # _assemble_internal(False)
     # copy_file_from_to(MAPPING_FILE_PATH, FINAL_OUTPUT_DIRECTORY + "/" + dir_name + "/mapping.txt")
     # Add git tag
     # add_tag_automatically(dir_name) # TODO remove comment

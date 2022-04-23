@@ -19,6 +19,9 @@ class ApkInfo:
         self.pkg = pkg
         self.vcode = vcode
         self.vname = vname
+        self.is32Bit = False
+        self.dest_dir = ''
+        self.dest_path = ''
 
     def is_valid(self) -> bool:
         '''Is given APKInfo valid.'''
