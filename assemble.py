@@ -19,10 +19,10 @@ def assemble(is32Bit: bool) -> ApkInfo:
     apk_output_dir = configurations['build']['apk_output_dir']
     apk_copy_to = configurations['dest']['apk_dir']
     # Aassemble and copy to destination. 
-    # _do_real_assemble(is32Bit, gradlew_dir, build_file, abi_filters_64, abi_filters_32)
+    _do_real_assemble(is32Bit, gradlew_dir, build_file, abi_filters_64, abi_filters_32)
     info = _find_apk_under_given_directory(apk_output_dir)
-    _copy_apk_from_dir_to_dir(info, is32Bit, apk_copy_to)
     info.is32Bit = is32Bit
+    _copy_apk_from_dir_to_dir(info, is32Bit, apk_copy_to)
     # Return the final APK info. 
     return info
 
@@ -59,11 +59,7 @@ def _copy_apk_from_dir_to_dir(info: ApkInfo, is32Bit: bool, td: str):
     if not os.path.exists(dir):
         os.mkdir(dir)
     fname = os.path.basename(info.path)
-    prefix = ''
-    if is32Bit:
-        prefix = '32BIT'
-    else:
-        prefix = '64BIT'
+    prefix = info.get_file_prefix()
     fname = fname.replace(info.pkg, prefix)
     dest_path = os.path.join(dir, fname)
     copy_to(info.path, dest_path)

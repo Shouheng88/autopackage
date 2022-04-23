@@ -15,7 +15,6 @@ FINAL_OUTPUT_DIRECTORY = ""
 # The directory to store the languages files. 
 COMMUNITY_LANGUAGES_DIR = "D:/codes/other/LeafNote-Community/languages/app"
 
-
 def copy_language_resources(version_name: str):
     '''Copy language resources to community repo and push to github.'''
     app_language_dir = "%s/%s" % (COMMUNITY_LANGUAGES_DIR, version_name)
@@ -37,7 +36,6 @@ def add_tag_automatically(version_name: str):
         && git tag v%s \
         && git push origin --tags" % (version_name, version_name))
 
-
 def config_logging(filename: str = 'app.log'):
     '''Config logging library globaly.'''
     log_format = "%(asctime)s - %(levelname)s - %(message)s"
@@ -53,7 +51,7 @@ def _assemble_internal(is32Bit: bool):
 if __name__ == "__main__":
     config_logging()
     _assemble_internal(True)
-    # _assemble_internal(False)
+    _assemble_internal(False)
     # copy_file_from_to(MAPPING_FILE_PATH, FINAL_OUTPUT_DIRECTORY + "/" + dir_name + "/mapping.txt")
     # Add git tag
     # add_tag_automatically(dir_name) # TODO remove comment

@@ -23,6 +23,15 @@ class ApkInfo:
         self.dest_dir = ''
         self.dest_path = ''
 
+    def get_file_prefix(self) -> str:
+        '''Get file prefix based on the bit state.'''
+        prefix = ''
+        if self.is32Bit:
+            prefix = '32BIT'
+        else:
+            prefix = '64BIT'
+        return prefix
+
     def is_valid(self) -> bool:
         '''Is given APKInfo valid.'''
         return len(self.path) > 0

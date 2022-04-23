@@ -33,13 +33,14 @@ def _find_last_apk_version(info: ApkInfo, output_dir: str) -> str:
 def _output_apk_info(info: ApkInfo):
     '''Output the APK info.'''
     content = os.popen("java -jar bin/diffuse.jar info %s" % info.dest_path).read().strip()
-    fname = os.path.join(info.dest_dir, "info.txt")
+    fname = os.path.join(info.dest_dir, "%s_info.txt" % info.get_file_prefix())
     write_file(fname, content)
 
 def _get_last_apk_path(info: ApkInfo, last_version_dir: str) -> str:
     '''Get last APK file path.'''
     for f in os.listdir(last_version_dir):
-        if (f.startswith("32BIT") and info.is32Bit) or (f.startswith('64BIT') and not info.is32Bit):
+        if (f.startswith("32BIT") and f.endswith(".apk") and info.is32Bit) \
+            or (f.startswith('64BIT') and f.endswith(".apk") and not info.is32Bit):
             return os.path.join(last_version_dir, f)
     return ''
 
@@ -50,5 +51,5 @@ def _output_apk_diff(info: ApkInfo, last_version_dir: str):
         _output_apk_info(info)
         return
     content = os.popen("java -jar bin/diffuse.jar diff %s %s" % (last_apk_path, info.dest_path)).read().strip()
-    fname = os.path.join(info.dest_dir, "diff.txt")
+    fname = os.path.join(info.dest_dir, "%s_diff.txt" % info.get_file_prefix())
     write_file(fname, content)
