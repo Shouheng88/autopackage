@@ -53,7 +53,8 @@ def _copy_language_resources(version_name: str):
 
 def _add_tag_automatically(version_name: str):
     '''Add tag for current commit.'''
-    os.system("git add ../build.gradle \
+    os.system("cd .. \
+        && git add build.gradle \
         && git commit -m \"publish %s\" \
         && git push \
         && git tag v%s \
@@ -61,7 +62,7 @@ def _add_tag_automatically(version_name: str):
 
 if __name__ == "__main__":
     _config_logging()
-    _assemble_internal(True)
-    info = _assemble_internal(False)
-    _add_tag_automatically(info.vname)
+    _assemble_internal(False)
+    info = _assemble_internal(True)
+    _add_tag_automatically("3.4.1")
     _copy_language_resources(info.vname)
