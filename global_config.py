@@ -16,6 +16,9 @@ class GlobalConfig:
         self.apk_copy_to = '' 
         self.mapping_path = ''
         self.languages_dir = ''
+        self.jiagu_account = ''
+        self.jiagu_password = ''
+        self.jiagu_exec_path = ''
 
     def parse(self):
         '''Parse global configurations from config yaml file.'''
@@ -29,5 +32,8 @@ class GlobalConfig:
         self.mapping_path = configurations['build']['mapping_path']
         self.apk_copy_to = configurations['dest']['apk_dir']
         self.languages_dir = configurations['community']['languages_dir']
+        self.jiagu_account = configurations['jiagu']['account']
+        self.jiagu_password = configurations['jiagu']['password']
+        self.jiagu_exec_path = configurations['jiagu']['exec_path']
 
 config = GlobalConfig()

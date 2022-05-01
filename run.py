@@ -9,6 +9,7 @@ from apktool import ApkInfo
 from logger import config_logging
 from gittag import gen_git_tag
 from global_config import *
+from jiagu import jiagu
 
 def _assemble_internal(is32Bit: bool) -> ApkInfo:
     '''Assemble APK and others.'''
@@ -47,11 +48,18 @@ def _add_tag_automatically(version_name: str):
         && git tag v%s \
         && git push origin --tags" % (version_name, version_name))
 
+def _jiagu_apks(info: ApkInfo, info2: ApkInfo):
+    '''Reinforce APKs.'''
+    jiagu(info.dest_path, info.dest_dir)
+    jiagu(info2.dest_path, info2.dest_dir)
+
 if __name__ == "__main__":
     config_logging()
     config.parse()
-    _assemble_internal(False)
-    info = _assemble_internal(True)
+    info = _assemble_internal(False)
+    info2 = _assemble_internal(True)
     _add_tag_automatically(info.vname)
     _copy_language_resources(info.vname)
     gen_git_tag(info)
+    _apk_jiagu()
+    _jiagu_apks(info, info2)
