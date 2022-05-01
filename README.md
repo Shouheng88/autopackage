@@ -7,6 +7,7 @@ An Android auto package script. Mainly used to
 - Diff APK with last version or output its info base on [diffuse](https://github.com/JakeWharton/diffuse)
 - Copy language resources to given dirctory, commit to github repo for translation cooperation
 - Add git tag automatically and push to remote git repo
+- Automatically generate APP upgrade log from git logs
 - More in the future.
 
 ## Prapare
