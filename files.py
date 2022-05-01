@@ -10,7 +10,7 @@ def read_yaml(yaml_file: str):
 
 def read_file(fname) -> str:
     '''Read text from file.'''
-    with open(fname, 'r') as f:
+    with open(fname, 'r', encoding="utf-8") as f:
         return f.read()
 
 def write_file(fname, content:str):

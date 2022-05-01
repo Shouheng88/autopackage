@@ -6,6 +6,8 @@ from assemble import assemble
 from diffuse import diff_apk
 from files import *
 from apktool import ApkInfo
+from logger import config_logging
+from gittag import gen_git_tag
 
 # The path under witch to find the APKs. 
 PROD_OUTPUT_APK_PATH = ""
@@ -15,13 +17,8 @@ MAPPING_FILE_PATH = "../app/mapping.txt"
 FINAL_OUTPUT_DIRECTORY = ""
 # The directory to store the languages files. 
 COMMUNITY_LANGUAGES_DIR = "D:/codes/other/LeafNote-Community/languages/app"
-
-def _config_logging(filename: str = 'app.log'):
-    '''Config logging library globaly.'''
-    log_format = "%(asctime)s - %(levelname)s - %(message)s"
-    date_format = "%m/%d/%Y %H:%M:%S %p"
-    logging.basicConfig(filename=filename, filemode='a', level=logging.DEBUG, format=log_format, datefmt=date_format)
-    logging.FileHandler(filename=filename, encoding='utf-8')
+# The directory to store the git logs. 
+COMMUNITY_LOGS_DIR = "D:/codes/other/LeafNote-Community/logs"
 
 def _assemble_internal(is32Bit: bool) -> ApkInfo:
     '''Assemble APK and others.'''
@@ -61,8 +58,9 @@ def _add_tag_automatically(version_name: str):
         && git push origin --tags" % (version_name, version_name))
 
 if __name__ == "__main__":
-    _config_logging()
+    config_logging()
     _assemble_internal(False)
     info = _assemble_internal(True)
     _add_tag_automatically("3.4.1")
     _copy_language_resources(info.vname)
+    gen_git_tag(info)

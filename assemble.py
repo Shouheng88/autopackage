@@ -31,9 +31,9 @@ def _do_real_assemble(is32Bit: bool, gradlew_dir: str, build_file: str, \
     '''Do real assemble task.'''
     content = read_file(build_file)
     if is32Bit:
-        _change_ndk_abi_filters(content, abi_filters_64, abi_filters_32)
+        content = _change_ndk_abi_filters(content, abi_filters_64, abi_filters_32)
     else:
-        _change_ndk_abi_filters(content, abi_filters_32, abi_filters_64)
+        content = _change_ndk_abi_filters(content, abi_filters_32, abi_filters_64)
     write_file(build_file, content)
     os.system("cd %s && gradlew clean resguardProdRelease" % gradlew_dir)
 
