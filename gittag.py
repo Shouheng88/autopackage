@@ -7,7 +7,9 @@ from files import *
 from assemble import YAML_CONFIGURATION_FILE_PATH
 from logger import config_logging
 from typing import List
-from run import COMMUNITY_LOGS_DIR
+
+# The directory to store the git logs. 
+COMMUNITY_LOGS_DIR = "D:/codes/other/LeafNote-Community/logs"
 
 def gen_git_tag(info: ApkInfo):
     '''Generate git tag logs.'''

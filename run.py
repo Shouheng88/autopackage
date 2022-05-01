@@ -17,8 +17,6 @@ MAPPING_FILE_PATH = "../app/mapping.txt"
 FINAL_OUTPUT_DIRECTORY = ""
 # The directory to store the languages files. 
 COMMUNITY_LANGUAGES_DIR = "D:/codes/other/LeafNote-Community/languages/app"
-# The directory to store the git logs. 
-COMMUNITY_LOGS_DIR = "D:/codes/other/LeafNote-Community/logs"
 
 def _assemble_internal(is32Bit: bool) -> ApkInfo:
     '''Assemble APK and others.'''
