@@ -10,15 +10,6 @@ from logger import config_logging
 from gittag import gen_git_tag
 from global_config import *
 
-# The path under witch to find the APKs. 
-PROD_OUTPUT_APK_PATH = ""
-# The mapping file location. 
-MAPPING_FILE_PATH = "../app/mapping.txt"
-# The directory to store the assembled APKs. 
-FINAL_OUTPUT_DIRECTORY = ""
-# The directory to store the languages files. 
-COMMUNITY_LANGUAGES_DIR = "D:/codes/other/LeafNote-Community/languages/app"
-
 def _assemble_internal(is32Bit: bool) -> ApkInfo:
     '''Assemble APK and others.'''
     # Assemble APKs. 
@@ -27,12 +18,12 @@ def _assemble_internal(is32Bit: bool) -> ApkInfo:
     diff_apk(info)
     # Copy mapping file to destination. 
     mapping_to = os.path.join(info.dest_dir, "%s_mapping.txt" % info.get_file_prefix())
-    copy_to(MAPPING_FILE_PATH, mapping_to)
+    copy_to(config.mapping_path, mapping_to)
     return info
 
 def _copy_language_resources(version_name: str):
     '''Copy language resources to community repo and push to github.'''
-    app_language_dir = os.path.join(COMMUNITY_LANGUAGES_DIR, version_name)
+    app_language_dir = os.path.join(config.languages_dir, version_name)
     any_new_resources = False
     for values_dir in os.listdir('../app/src/main/res/'):
         if values_dir.startswith('values'):
@@ -61,6 +52,6 @@ if __name__ == "__main__":
     config.parse()
     _assemble_internal(False)
     info = _assemble_internal(True)
-    _add_tag_automatically("3.4.1")
+    _add_tag_automatically(info.vname)
     _copy_language_resources(info.vname)
     gen_git_tag(info)

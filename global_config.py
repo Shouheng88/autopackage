@@ -14,6 +14,8 @@ class GlobalConfig:
         self.abi_filters_64 = ''
         self.apk_output_dir = ''
         self.apk_copy_to = '' 
+        self.mapping_path = ''
+        self.languages_dir = ''
 
     def parse(self):
         '''Parse global configurations from config yaml file.'''
@@ -24,6 +26,8 @@ class GlobalConfig:
         self.abi_filters_32 = configurations['build']['ndk']['abi_32']
         self.abi_filters_64 = configurations['build']['ndk']['abi_64']
         self.apk_output_dir = configurations['build']['apk_output_dir']
+        self.mapping_path = configurations['build']['mapping_path']
         self.apk_copy_to = configurations['dest']['apk_dir']
+        self.languages_dir = configurations['community']['languages_dir']
 
 config = GlobalConfig()
