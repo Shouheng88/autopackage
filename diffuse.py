@@ -4,12 +4,11 @@
 import logging
 from apktool import *
 from files import *
-from assemble import YAML_CONFIGURATION_FILE_PATH
+from global_config import *
 
 def diff_apk(info: ApkInfo):
     '''Diff APK or output its information.'''
-    configurations = read_yaml(YAML_CONFIGURATION_FILE_PATH)
-    apk_output_dir = configurations['dest']['apk_dir']
+    apk_output_dir = config.apk_copy_to
     last_version_dir = _find_last_apk_version(info, apk_output_dir)
     logging.debug("Found last version dir: %s" % last_version_dir)
     if len(last_version_dir) == 0:

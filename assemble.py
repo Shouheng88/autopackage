@@ -4,38 +4,27 @@
 import logging
 from files import *
 from apktool import *
-
-YAML_CONFIGURATION_FILE_PATH = "config.yml"
+from global_config import *
 
 def assemble(is32Bit: bool) -> ApkInfo:
     '''Assemble the APK with given bit.''' 
-    # Read configurations. 
-    configurations = read_yaml(YAML_CONFIGURATION_FILE_PATH)
-    logging.debug(str(configurations))
-    build_file = configurations['build']['file']
-    gradlew_dir = configurations['build']['gradlew']
-    abi_filters_32 = configurations['build']['ndk']['abi_32']
-    abi_filters_64 = configurations['build']['ndk']['abi_64']
-    apk_output_dir = configurations['build']['apk_output_dir']
-    apk_copy_to = configurations['dest']['apk_dir']
     # Aassemble and copy to destination. 
-    _do_real_assemble(is32Bit, gradlew_dir, build_file, abi_filters_64, abi_filters_32)
-    info = _find_apk_under_given_directory(apk_output_dir)
+    _do_real_assemble(is32Bit)
+    info = _find_apk_under_given_directory(config.apk_output_dir)
     info.is32Bit = is32Bit
-    _copy_apk_from_dir_to_dir(info, is32Bit, apk_copy_to)
+    _copy_apk_from_dir_to_dir(info, is32Bit, config.apk_copy_to)
     # Return the final APK info. 
     return info
 
-def _do_real_assemble(is32Bit: bool, gradlew_dir: str, build_file: str, \
-    abi_filters_64: str, abi_filters_32: str):
+def _do_real_assemble(is32Bit: bool):
     '''Do real assemble task.'''
-    content = read_file(build_file)
+    content = read_file(config.build_file)
     if is32Bit:
-        content = _change_ndk_abi_filters(content, abi_filters_64, abi_filters_32)
+        content = _change_ndk_abi_filters(content, config.abi_filters_64, config.abi_filters_32)
     else:
-        content = _change_ndk_abi_filters(content, abi_filters_32, abi_filters_64)
-    write_file(build_file, content)
-    os.system("cd %s && gradlew clean resguardProdRelease" % gradlew_dir)
+        content = _change_ndk_abi_filters(content, config.abi_filters_32, config.abi_filters_64)
+    write_file(config.build_file, content)
+    os.system("cd %s && gradlew clean resguardProdRelease" % config.gradlew_dir)
 
 def _change_ndk_abi_filters(content: str, f: str, t: str) -> str:
     '''Change nkd abi filters.'''

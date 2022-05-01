@@ -8,6 +8,7 @@ from files import *
 from apktool import ApkInfo
 from logger import config_logging
 from gittag import gen_git_tag
+from global_config import *
 
 # The path under witch to find the APKs. 
 PROD_OUTPUT_APK_PATH = ""
@@ -57,6 +58,7 @@ def _add_tag_automatically(version_name: str):
 
 if __name__ == "__main__":
     config_logging()
+    config.parse()
     _assemble_internal(False)
     info = _assemble_internal(True)
     _add_tag_automatically("3.4.1")
