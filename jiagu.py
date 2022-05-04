@@ -7,6 +7,8 @@ from logger import config_logging
 
 def jiagu(apk: str, out: str):
     '''Reinforce the APP.'''
+    if not os.path.exists(out):
+        os.mkdir(out)
     os.system("java -jar %s -login %s %s\
         && java -jar %s -jiagu %s %s -autosign -automulpkg"\
         % (config.jiagu_exec_path, config.jiagu_account, config.jiagu_password\

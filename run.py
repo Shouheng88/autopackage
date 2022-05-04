@@ -50,7 +50,7 @@ def _add_tag_automatically(version_name: str):
 
 def _jiagu_apks(info: ApkInfo, info2: ApkInfo):
     '''Reinforce APKs.'''
-    jiagu(info.dest_path, info.dest_dir)
+    jiagu(info.dest_path, info.dest_dir + "/jiagu")
     jiagu(info2.dest_path, info2.dest_dir)
 
 if __name__ == "__main__":
@@ -61,5 +61,4 @@ if __name__ == "__main__":
     _add_tag_automatically(info.vname)
     _copy_language_resources(info.vname)
     gen_git_tag(info)
-    _apk_jiagu()
     _jiagu_apks(info, info2)
