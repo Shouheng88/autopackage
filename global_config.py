@@ -19,6 +19,9 @@ class GlobalConfig:
         self.jiagu_account = ''
         self.jiagu_password = ''
         self.jiagu_exec_path = ''
+        self.mail_receivers = []
+        self.mail_user = ''
+        self.mail_password = ''
 
     def parse(self):
         '''Parse global configurations from config yaml file.'''
@@ -35,5 +38,8 @@ class GlobalConfig:
         self.jiagu_account = configurations['jiagu']['account']
         self.jiagu_password = configurations['jiagu']['password']
         self.jiagu_exec_path = configurations['jiagu']['exec_path']
+        self.mail_receivers = configurations['mail']['receivers']
+        self.mail_user = configurations['mail']['user']
+        self.mail_password = configurations['mail']['password']
 
 config = GlobalConfig()

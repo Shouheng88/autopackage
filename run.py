@@ -10,17 +10,20 @@ from logger import config_logging
 from gittag import gen_git_tag
 from global_config import *
 from jiagu import jiagu
+from mailing import send_email
 
 def _assemble_internal(is32Bit: bool) -> ApkInfo:
     '''Assemble APK and others.'''
     # Assemble APKs. 
     info = assemble(is32Bit)
-    # Diff APKs or show APK info. 
-    diff_apk(info)
     # Copy mapping file to destination. 
     mapping_to = os.path.join(info.dest_dir, "%s_mapping.txt" % info.get_file_prefix())
     copy_to(config.mapping_path, mapping_to)
     return info
+
+def _diff_apk(info: ApkInfo) -> str:
+    '''Diff APK and return the diff result.'''
+    return diff_apk(info)
 
 def _copy_language_resources(version_name: str):
     '''Copy language resources to community repo and push to github.'''
@@ -53,12 +56,23 @@ def _jiagu_apks(info: ApkInfo, info2: ApkInfo):
     jiagu(info.dest_path, info.dest_dir + "/jiagu")
     jiagu(info2.dest_path, info2.dest_dir)
 
+def _send_result(info: str):
+    '''Send result to receivers by email.'''
+    send_email(config.mail_receivers, "Android自动打包脚本", info)
+
 if __name__ == "__main__":
     config_logging()
     config.parse()
+    # Assemble APK and make a diff for 64 bit. 
     info = _assemble_internal(False)
+    diff_result = _diff_apk(info)
+    # Assemble APK and make a diff for 32 bit. 
     info2 = _assemble_internal(True)
+    _diff_apk(info2)
+    # Add tag and other jobs ...
     _add_tag_automatically(info.vname)
     _copy_language_resources(info.vname)
     gen_git_tag(info)
     _jiagu_apks(info, info2)
+    # Send result by email. 
+    _send_result(diff_result)
