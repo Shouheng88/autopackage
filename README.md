@@ -1,5 +1,7 @@
 # Auto Package
 
+[中文版](README-zh.md)
+
 ## 1. What?
 
 An Android auto package script. Mainly used to 
@@ -11,6 +13,7 @@ An Android auto package script. Mainly used to
 - Add git tag automatically and push to remote git repo
 - Automatically generate APP upgrade log from git logs
 - Reinforce APKs by [360 Security](https://jiagu.360.cn/#/global/index)
+- Upload APKs to lanzou cloud
 - Notify receivers when succeed by email
 - More in the future.
 
@@ -20,6 +23,8 @@ An Android auto package script. Mainly used to
 
 - Python: Python3
 - Add `pyymal` library to your environment by: `pip install pyyaml`
+- And `requests` library to your environment by: `pip install requests`
+- And `requests_toolbelt` library to your environment by: `pip install requests_toolbelt`
 
 ### 2.2 Use
 

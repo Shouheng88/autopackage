@@ -22,6 +22,10 @@ class GlobalConfig:
         self.mail_receivers = []
         self.mail_user = ''
         self.mail_password = ''
+        self.lanzou_username = ''
+        self.lanzou_password = ''
+        self.lanzou_ylogin = ''
+        self.lanzou_phpdisk_info = ''
 
     def parse(self):
         '''Parse global configurations from config yaml file.'''
@@ -41,5 +45,9 @@ class GlobalConfig:
         self.mail_receivers = configurations['mail']['receivers']
         self.mail_user = configurations['mail']['user']
         self.mail_password = configurations['mail']['password']
+        self.lanzou_username = configurations['lanzou']['username']
+        self.lanzou_password = configurations['lanzou']['password']
+        self.lanzou_ylogin = configurations['lanzou']['ylogin']
+        self.lanzou_phpdisk_info = configurations['lanzou']['phpdisk_info']
 
 config = GlobalConfig()
