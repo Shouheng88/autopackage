@@ -47,7 +47,7 @@ class GlobalConfig:
         self.mail_password = configurations['mail']['password']
         self.lanzou_username = configurations['lanzou']['username']
         self.lanzou_password = configurations['lanzou']['password']
-        self.lanzou_ylogin = configurations['lanzou']['ylogin']
+        self.lanzou_ylogin = str(configurations['lanzou']['ylogin'])
         self.lanzou_phpdisk_info = configurations['lanzou']['phpdisk_info']
 
 config = GlobalConfig()
