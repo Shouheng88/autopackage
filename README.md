@@ -14,6 +14,7 @@ An Android auto package script. Mainly used to
 - Automatically generate APP upgrade log from git logs
 - Reinforce APKs by [360 Security](https://jiagu.360.cn/#/global/index)
 - Upload APKs to lanzou cloud
+- Send APK and upgrade log to Telegram group by bot
 - Notify receivers when succeed by email
 - More in the future.
 
