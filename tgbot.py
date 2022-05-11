@@ -12,7 +12,7 @@ from logger import config_logging
 
 TG_SEND_DOCUMENT_URL = 'https://api.telegram.org/bot%s/sendDocument'
 
-def send_apk(path: str, msg: str):
+def send_apk(path: str, name: str, msg: str):
     '''Send APK to TG channel by bot.'''
     if config.tg_chat_id is None or config.tg_chat_id == 0:
         logging.error("Failed to send APK to TG: chat id required!")
@@ -22,7 +22,7 @@ def send_apk(path: str, msg: str):
         return
     url = TG_SEND_DOCUMENT_URL % (config.tg_token)
     files = {
-        'document': ("tst", open(path, 'rb'))
+        'document': (name, open(path, 'rb'))
     }
     ret = requests.post(url, data={
         'chat_id': config.tg_chat_id,
