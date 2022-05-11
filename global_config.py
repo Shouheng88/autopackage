@@ -26,6 +26,8 @@ class GlobalConfig:
         self.lanzou_password = ''
         self.lanzou_ylogin = ''
         self.lanzou_phpdisk_info = ''
+        self.tg_chat_id = 0
+        self.tg_token = ''
 
     def parse(self):
         '''Parse global configurations from config yaml file.'''
@@ -49,5 +51,7 @@ class GlobalConfig:
         self.lanzou_password = configurations['lanzou']['password']
         self.lanzou_ylogin = str(configurations['lanzou']['ylogin'])
         self.lanzou_phpdisk_info = configurations['lanzou']['phpdisk_info']
+        self.tg_chat_id = configurations['telegram']['chat_id']
+        self.tg_token = configurations['telegram']['token']
 
 config = GlobalConfig()
