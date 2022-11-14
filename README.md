@@ -1,6 +1,6 @@
 # Auto Package
 
-[中文版](README-zh.md)
+[中文版](docs/README-zh.md)
 
 ## 1. What?
 
