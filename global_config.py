@@ -6,7 +6,7 @@ from files import *
 from enum import Enum
 from typing import Dict
 
-YAML_CONFIGURATION_FILE_PATH = "config.yml"
+YAML_CONFIGURATION_FILE_PATH = "config/config.yml"
 
 class BitConfiguration(Enum):
     '''Assemble APK package bit configuration, namely, 32 bit, 64 bit and 64 + 32 bit packages.'''
