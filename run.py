@@ -12,6 +12,22 @@ from global_config import *
 from strengthen import jiagu_360
 from mailing import send_email
 
+<<<<<<< Updated upstream
+=======
+def _assemble_internal(is32Bit: bool, flavor: str) -> ApkInfo:
+    '''Assemble APK and others.'''
+    # Assemble APKs. 
+    info = assemble(is32Bit, flavor)
+    # Copy mapping file to destination. 
+    mapping_to = os.path.join(info.dest_dir, "%s_mapping.txt" % info.get_file_prefix())
+    copy_to(config.mapping_path, mapping_to)
+    return info
+
+def _diff_apk(info: ApkInfo) -> str:
+    '''Diff APK and return the diff result.'''
+    return diff_apk(info)
+
+>>>>>>> Stashed changes
 def _copy_language_resources(version_name: str):
     '''Copy language resources to community repo and push to github.'''
     # TODO prase xml files and find strings added 
