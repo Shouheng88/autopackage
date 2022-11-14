@@ -1,0 +1,49 @@
+# APK Build Configurations.
+build:
+  # Gradlew file location directory.
+  gradlew_location: ../
+  # Gradlew build commands.
+  assemble_command:
+    national: resguardNationalRelease
+    oversea: resguardInternationalRelease
+  # Gradlew APK output diectories.
+  apk_output_directory:
+    national: ../app/build/outputs/apk/national/release
+    oversea: ../app/build/outputs/apk/international/release
+  # The mapping file location. 
+  mapping_file_path: ../app/mapping.txt
+# APK Strength Configurations.
+strengthen:
+  jiagu_360:
+    # 360 jiaguo executor jar file location.
+    executor_path: xxxxxxxxxx
+    account: xxxxxxxxxx
+    password: xxxxxxxxxx
+# Final Output Configurations.
+output:
+  # APK files store directory.
+  apk_directory: D:/codes/other/LeafNote-resources/apks
+  # Language files store directory.
+  languages_directory: D:/codes/other/LeafNote-Community/languages/app
+  # APK Info Output Email.
+  mail:
+    title: xxxxxxxxxx
+    receivers:
+      - xxxxxxxxxx
+      - xxxxxxxxxx
+    user: xxxxxxxxxx
+    password: xxxxxxxxxx
+  # Git log store file path.
+  git_log_store_file: D:/codes/other/LeafNote-Community/GITLOG.md
+# APK Publish Configurations.
+publish:
+  # LanZou Cloud Info.
+  lanzou:
+    username: xxxxxxxxxx
+    password: xxxxxxxxxx
+    ylogin: xxxxxxxxxx
+    phpdisk_info: xxxxxxxxxx
+  # Telegram Chat Info.
+  telegram:
+    chat_id: xxxxxxxxxx
+    token: xxxxxxxxxx
