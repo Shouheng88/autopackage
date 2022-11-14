@@ -4,10 +4,10 @@
 import os
 from global_config import *
 from logger import *
-from tgbot import send_apk
+from telegram_bot import send_apk
 from lanzou import a_upload
 from files import *
-from gittag import COMMUNITY_LOGS_DIR
+from git_tag import COMMUNITY_LOGS_DIR
 
 def publish(app: str, ver: str):
     '''
@@ -19,9 +19,9 @@ def publish(app: str, ver: str):
         loge("Failed: version code is invalid!")
         return
     dest_dir = ''
-    for dir in os.listdir(config.apk_copy_to):
+    for dir in os.listdir(config.output_apk_directory):
         if dir.startswith(ver + "_"):
-            dest_dir = os.path.join(config.apk_copy_to, dir)
+            dest_dir = os.path.join(config.output_apk_directory, dir)
             break
     if len(dest_dir) == 0:
         loge("Failed to find APK of version: [%s]" % ver)
@@ -75,6 +75,5 @@ def _read_upgrade_log(ver: str) -> str:
 if __name__ == "__main__":
     '''Test entry.'''
     config_logging()
-    config.parse()
     # print(_read_upgrade_log("3.5"))
     publish("LeafNote", "3.5")
