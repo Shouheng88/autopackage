@@ -54,6 +54,7 @@ def _output_apk_diff_result(info: ApkInfo, last_version_directory: str) -> str:
     if len(last_version_apk_file_path) == 0:
         _output_current_apk_information(info)
         return
+    logi("Found last version APK file: %s" % last_version_apk_file_path)
     diff_result_content = os.popen("java -jar bin/diffuse.jar diff %s %s" % \
         (last_version_apk_file_path, info.output_apk_file_path)).read().strip()
     diff_result_file_name = os.path.join(info.output_apk_directory, \

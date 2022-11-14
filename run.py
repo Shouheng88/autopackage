@@ -38,11 +38,12 @@ def _build_apk(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
     jiagu_360(info.output_apk_file_path, jiagu_file_directory)
     mail_subject = "%s(%s,%s)" % (config.output_mail_title, flavor.get_name(), bit.get_name())
     send_email(config.output_mail_receivers, mail_subject, diff)
+    return info
 
 if __name__ == "__main__":
     config_logging()
     info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.NATIONAL)
-    info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.OVERSEA)
+    # info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.OVERSEA)
     _copy_language_resources(info.version_name)
     gen_git_log(info)
     add_new_tag(info)
