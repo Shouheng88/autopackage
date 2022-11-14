@@ -48,17 +48,17 @@ def a_upload(name: str, path: str):
     - name: file name should have the extension info, and it should be supported your lanzou cloud account
     - path: the file path to upload
     '''
-    if len(config.lanzou_ylogin) == 0:
+    if len(config.publish_lanzou_ylogin) == 0:
         logging.error("lanzou cloud ylogin filed required!")
         return
-    if len(config.lanzou_phpdisk_info) == 0:
+    if len(config.publish_lanzou_phpdisk_info) == 0:
         logging.error("lanzou cloud phpdisk_info filed required!")
         return
     url_upload = "https://up.woozooo.com/fileup.php"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36 Edg/89.0.774.45',
         'Accept-Language': 'zh-CN,zh;q=0.9',
-        'Referer': f'https://up.woozooo.com/mydisk.php?item=files&action=index&u={config.lanzou_ylogin}'
+        'Referer': f'https://up.woozooo.com/mydisk.php?item=files&action=index&u={config.publish_lanzou_ylogin}'
     }
     post_data = {
         "task": "1",
@@ -67,8 +67,8 @@ def a_upload(name: str, path: str):
         "name": name,
     }
     cookie = {
-        'ylogin': config.lanzou_ylogin,
-        'phpdisk_info': config.lanzou_phpdisk_info
+        'ylogin': config.publish_lanzou_ylogin,
+        'phpdisk_info': config.publish_lanzou_phpdisk_info
     }
     files = {'upload_file': (name, open(path, "rb"), 'application/octet-stream')}
     multipart_encoder = MultipartEncoder(
@@ -146,7 +146,6 @@ def a_login(ylogin: str, phpdisk_info: str):
 
 if __name__ == "__main__":
     config_logging()
-    config.parse()
     # ret = a_login(ylogin, phpdisk_info)
     # if ret:
     ret = a_upload("test2.apk", "D:\\codes\\other\\LeafNote-resources\\apks\\3.5.1_261\\32BIT-prod-release-3.5.1-261.apk")
