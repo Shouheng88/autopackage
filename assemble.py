@@ -1,57 +1,54 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import logging
 from files import *
 from apktool import *
 from global_config import *
+from logger import *
 
-def assemble(is32Bit: bool) -> ApkInfo:
-    '''Assemble the APK with given bit.''' 
-    # Aassemble and copy to destination. 
-    _do_real_assemble(is32Bit)
-    info = _find_apk_under_given_directory(config.apk_output_dir)
-    info.is32Bit = is32Bit
-    _copy_apk_from_dir_to_dir(info, is32Bit, config.apk_copy_to)
-    # Return the final APK info. 
+def assemble(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
+    '''Assemble APK with bit and flavor and copy APK and mapping files to destination.''' 
+    assemble_command = "cd %s && gradlew clean %s -Pbuild_ndk_type=%s" \
+        % (config.gradlew_location, flavor.get_gradlew_command(), bit.get_gradlew_bit_param_value())
+    logi("Final gradlew command is [%s]" % assemble_command)
+    os.system(assemble_command)
+    info = _find_apk_under_given_directory(bit, flavor)
+    _copy_apk_to_directory(info)
+    _copy_mapping_file_to_directory(info, flavor)
     return info
 
-def _do_real_assemble(is32Bit: bool):
-    '''Do real assemble task.'''
-    content = read_file(config.build_file)
-    if is32Bit:
-        content = _change_ndk_abi_filters(content, config.abi_filters_64, config.abi_filters_32)
-    else:
-        content = _change_ndk_abi_filters(content, config.abi_filters_32, config.abi_filters_64)
-    write_file(config.build_file, content)
-    os.system("cd %s && gradlew clean resguardProdRelease" % config.gradlew_dir)
-
-def _change_ndk_abi_filters(content: str, f: str, t: str) -> str:
-    '''Change nkd abi filters.'''
-    return content.replace(f, t)
-
-def _find_apk_under_given_directory(dir: str) -> ApkInfo:
+def _find_apk_under_given_directory(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
     '''Get destination directory name.'''
-    apk_parser = ApkParser()
-    files = os.listdir(dir)
+    apk_output_directory = flavor.get_apk_output_directory()
+    files = os.listdir(apk_output_directory)
     for f in files:
         if f.endswith('apk'):
-            path = os.path.join(dir, f)
-            return apk_parser.get_apk_info(path)
+            path = os.path.join(apk_output_directory, f)
+            info = parse_apk_info(path)
+            break
+    # Fill bit and flavor configuration.
+    if info is not None:
+        info.build_bit = bit
+        info.build_flavor = flavor
+    return info
 
-def _copy_apk_from_dir_to_dir(info: ApkInfo, is32Bit: bool, td: str):
+def _copy_apk_to_directory(info: ApkInfo):
     '''Copy APK from one directory to another.'''
     if not info.is_valid():
-        logging.error("The APK info is invalid.")
+        loge("The APK info is invalid.")
         return
-    dir = os.path.join(td,  '%s_%s' % (info.vname, info.vcode) )
-    if not os.path.exists(dir):
-        os.mkdir(dir)
-    fname = os.path.basename(info.path)
-    prefix = info.get_file_prefix()
-    fname = fname.replace(info.pkg, prefix)
-    dest_path = os.path.join(dir, fname)
-    copy_to(info.path, dest_path)
+    output_apk_directory = os.path.join(config.output_apk_directory, '%s_%s' % (info.version_name, info.version_code))
+    if not os.path.exists(output_apk_directory):
+        os.mkdir(output_apk_directory)
+    apk_file_base_name = os.path.basename(info.source_apk_file_path)
+    output_apk_file_path = os.path.join(output_apk_directory, apk_file_base_name)
+    copy_to(info.source_apk_file_path, output_apk_file_path)
     # Fill in APk info.
-    info.dest_dir = dir
-    info.dest_path = dest_path
+    info.output_apk_directory = output_apk_directory
+    info.output_apk_file_path = output_apk_file_path
+
+def _copy_mapping_file_to_directory(info: ApkInfo, flavor: FlavorConfiguration):
+    '''Copy mapping file to given directory.'''
+    mapping_file_name = "%s_mapping.txt" % flavor.get_name()
+    mapping_file_copy_to = os.path.join(info.output_apk_directory, mapping_file_name)
+    copy_to(config.mapping_file_path, mapping_file_copy_to)

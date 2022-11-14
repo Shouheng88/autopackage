@@ -1,57 +1,101 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import logging
+from logger import *
 from files import *
+from enum import Enum
+from typing import Dict
 
 YAML_CONFIGURATION_FILE_PATH = "config.yml"
 
+class BitConfiguration(Enum):
+    '''Assemble APK package bit configuration, namely, 32 bit, 64 bit and 64 + 32 bit packages.'''
+    BIT_32 = 0
+    BIT_64 = 1
+    BIT_32_64 = 2
+
+    def get_name(self) -> str:
+        '''Get bit configuration name.'''
+        if self == BitConfiguration.BIT_32:
+            return 'ndk_32'
+        elif self == BitConfiguration.BIT_32_64:
+            return 'ndk_32_64'
+        else:
+            return 'ndk_64'
+
+    def get_gradlew_bit_param_value(self) -> str:
+        '''Get gradlew build parameter for given ndk/bit configuration.'''
+        if self == BitConfiguration.BIT_32:
+            return 'ndk_32'
+        elif self == BitConfiguration.BIT_32_64:
+            return 'ndk_32_64'
+        else:
+            return 'ndk_64'
+
+class FlavorConfiguration(Enum):
+    '''Assemble APK package flavor configuration, namely, national and international packages.'''
+    NATIONAL = 0
+    OVERSEA = 1
+
+    def get_name(self) -> str:
+        '''Get flavor name.'''
+        if self == FlavorConfiguration.OVERSEA:
+            return "oversea"
+        return "national"
+
+    def get_gradlew_command(self) -> str:
+        '''Get gradlew command configuration base on current flavor.'''
+        if self == FlavorConfiguration.OVERSEA:
+            return config._assemble_command_oversea
+        return config._assemble_command_national
+
+    def get_apk_output_directory(self) -> str:
+        '''Get APK output directory base on current flavor.'''
+        if self == FlavorConfiguration.OVERSEA:
+            return config._apk_output_directory_oversea
+        return config._apk_output_directory_national
+
 class GlobalConfig:
     def __init__(self):
-        self.build_file = ''
-        self.gradlew_dir = ''
-        self.abi_filters_32 = ''
-        self.abi_filters_64 = ''
-        self.apk_output_dir = ''
-        self.apk_copy_to = '' 
-        self.mapping_path = ''
-        self.languages_dir = ''
-        self.jiagu_account = ''
-        self.jiagu_password = ''
-        self.jiagu_exec_path = ''
-        self.mail_receivers = []
-        self.mail_user = ''
-        self.mail_password = ''
-        self.lanzou_username = ''
-        self.lanzou_password = ''
-        self.lanzou_ylogin = ''
-        self.lanzou_phpdisk_info = ''
-        self.tg_chat_id = 0
-        self.tg_token = ''
+        self._configurations = read_yaml(YAML_CONFIGURATION_FILE_PATH)
+        logd(str(self._configurations))
+        # Gradlew Build Configurations.
+        self.gradlew_location = self._read_key("build.gradlew_location")
+        self._assemble_command_national = self._read_key("build.assemble_command.national")
+        self._assemble_command_oversea  = self._read_key("build.assemble_command.oversea")
+        self._apk_output_directory_national = self._read_key('build.apk_output_directory.national')
+        self._apk_output_directory_oversea  = self._read_key('build.apk_output_directory.oversea')
+        self.mapping_file_path = self._read_key("build.mapping_file_path")
+        # APK Strength Configurations.
+        self.strengthen_jiagu_360_executor_path = self._read_key('strengthen.jiagu_360.executor_path')
+        self.strengthen_jiagu_360_account = self._read_key('strengthen.jiagu_360.account')
+        self.strengthen_jiagu_360_password = self._read_key('strengthen.jiagu_360.password')
+        # Final Output Configurations.
+        self.output_apk_directory = self._read_key('output.apk_directory')
+        self.output_languages_directory = self._read_key('output.languages_directory')
+        self.output_mail_title = self._read_key('output.mail.title')
+        self.output_mail_receivers = self._read_key('output.mail.receivers')
+        self.output_mail_user = self._read_key('output.mail.user')
+        self.output_mail_password = self._read_key('output.mail.password')
+        # APK Publish Configurations.
+        self.publish_lanzou_username = self._read_key('publish.lanzou.username')
+        self.publish_lanzou_password = self._read_key('publish.lanzou.password')
+        self.publish_lanzou_ylogin = self._read_key('publish.lanzou.ylogin')
+        self.publish_lanzou_phpdisk_info = self._read_key('publish.lanzou.phpdisk_info')
+        self.publish_telegram_chat_id = self._read_key('publish.telegram.chat_id')
+        self.publish_telegram_token = self._read_key('publish.telegram.token')
 
-    def parse(self):
-        '''Parse global configurations from config yaml file.'''
-        configurations = read_yaml(YAML_CONFIGURATION_FILE_PATH)
-        logging.debug(str(configurations))
-        self.build_file = configurations['build']['file']
-        self.gradlew_dir = configurations['build']['gradlew']
-        self.abi_filters_32 = configurations['build']['ndk']['abi_32']
-        self.abi_filters_64 = configurations['build']['ndk']['abi_64']
-        self.apk_output_dir = configurations['build']['apk_output_dir']
-        self.mapping_path = configurations['build']['mapping_path']
-        self.apk_copy_to = configurations['dest']['apk_dir']
-        self.languages_dir = configurations['community']['languages_dir']
-        self.jiagu_account = configurations['jiagu']['account']
-        self.jiagu_password = configurations['jiagu']['password']
-        self.jiagu_exec_path = configurations['jiagu']['exec_path']
-        self.mail_receivers = configurations['mail']['receivers']
-        self.mail_user = configurations['mail']['user']
-        self.mail_password = configurations['mail']['password']
-        self.lanzou_username = configurations['lanzou']['username']
-        self.lanzou_password = configurations['lanzou']['password']
-        self.lanzou_ylogin = str(configurations['lanzou']['ylogin'])
-        self.lanzou_phpdisk_info = configurations['lanzou']['phpdisk_info']
-        self.tg_chat_id = configurations['telegram']['chat_id']
-        self.tg_token = configurations['telegram']['token']
+    def _read_key(self, key: str):
+        '''Read key from configurations.'''
+        parts = key.split('.')
+        value = self._configurations
+        for part in parts:
+            value = value[part.strip()]
+        return value
 
 config = GlobalConfig()
+
+if __name__ == "__main__":
+    config_logging()
+    print(config._assemble_command_national)
+    print(config.output_mail_receivers)

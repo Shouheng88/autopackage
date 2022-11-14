@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import smtplib, traceback, logging
+import smtplib, traceback
 from email.header import Header
 from email import encoders
 from email.header import Header
@@ -13,9 +13,15 @@ from typing import *
 from logger import config_logging
 from global_config import *
 
-def send_email(receivers: List[str], subject: str, message: str, mail_type: str = 'plain', filename = None):
+def send_email(
+    receivers: List[str], 
+    subject: str, 
+    message: str, 
+    mail_type: str = 'plain', 
+    filename = None
+):
     '''Send email tool.'''
-    from_ = "Android自动打包脚本<%s>" % config.mail_user
+    from_ = "%s<%s>" % (subject, config.output_mail_user)
     to_ = ';'.join(['Manager<%s>' % email_ for email_ in receivers])
     msg = MIMEMultipart()
     msg['From'] = _format_addr(from_)
@@ -33,11 +39,11 @@ def send_email(receivers: List[str], subject: str, message: str, mail_type: str 
             msg.attach(mime)
     try:
         smtpObj = smtplib.SMTP_SSL('smtp.qq.com')
-        smtpObj.login(config.mail_user, config.mail_password)
-        smtpObj.sendmail(config.mail_user, receivers, msg.as_string())
-        logging.info("Succeed to send email.")
+        smtpObj.login(config.output_mail_user, config.output_mail_password)
+        smtpObj.sendmail(config.output_mail_user, receivers, msg.as_string())
+        logi("Succeed to send email.")
     except BaseException as e:
-        print("Failed to send email:\n%s" % traceback.format_exc())
+        loge("Failed to send email:\n%s" % traceback.format_exc())
 
 def _format_addr(s):
     name, addr = parseaddr(s)
@@ -46,8 +52,7 @@ def _format_addr(s):
 if __name__ == "__main__":
     '''Test entry.'''
     config_logging()
-    config.parse()
-    print(config.mail_receivers)
-    print(config.mail_user)
-    print(config.mail_password)
-    send_email(config.mail_receivers, "测试", "测试")
+    logd(config.output_mail_receivers)
+    logd(config.output_mail_user)
+    logd(config.output_mail_password)
+    send_email(config.output_mail_receivers, "测试", "测试")
