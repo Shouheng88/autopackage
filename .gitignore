@@ -1,3 +1,4 @@
 __pycache__/*
 app.log
 config/config_product.yml
+.DS_Store

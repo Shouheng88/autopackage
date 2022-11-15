@@ -5,7 +5,6 @@ import logging, os
 from apktool import *
 from files import *
 from logger import config_logging
-from typing import List
 from pathlib import Path
 
 def add_new_tag(info: ApkInfo):
