@@ -6,14 +6,22 @@ from apktool import *
 from files import *
 from global_config import *
 
+DIFF_RESULT_HTML_TEMPLATE = "config/template_diff.html"
+DIFF_RESULT_HTML_PLACEHOLER = "diff_result_content"
+
 def diff_apk(info: ApkInfo) -> str:
     '''Diff APK or output its information.'''
     last_version_directory = _find_last_version_directory(info)
     logd("Found last version directory: %s" % last_version_directory)
+    diff_result = ''
     if len(last_version_directory) == 0:
-        return _output_current_apk_information(info)
+        diff_result = _output_current_apk_information(info)
     else:
-        return _output_apk_diff_result(info, last_version_directory)
+        diff_result = _output_apk_diff_result(info, last_version_directory)
+    # Format diff result as a html content.
+    html_diff_content = read_file(DIFF_RESULT_HTML_TEMPLATE)
+    html_diff_content = html_diff_content.replace(DIFF_RESULT_HTML_PLACEHOLER, diff_result)
+    return html_diff_content
 
 def _find_last_version_directory(info: ApkInfo) -> str:
     '''Find last APK version by APK output directory.'''

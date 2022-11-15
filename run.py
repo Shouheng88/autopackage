@@ -37,7 +37,7 @@ def _build_apk(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
     jiagu_file_directory = os.path.join(info.output_apk_directory, 'strengthen')
     jiagu_360(info.output_apk_file_path, jiagu_file_directory)
     mail_subject = "%s(%s,%s)" % (config.output_mail_title, flavor.get_name(), bit.get_name())
-    send_email(config.output_mail_receivers, mail_subject, diff)
+    send_email(config.output_mail_receivers, mail_subject, diff, 'html')
     return info
 
 if __name__ == "__main__":

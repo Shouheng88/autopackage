@@ -18,7 +18,7 @@ def logd(msg: str):
 def loge(msg: str):
     '''E level log.'''
     print(msg)
-    logging.error(msg)(msg)
+    logging.error(msg)
     
 def logi(msg: str):
     '''I level log.'''
