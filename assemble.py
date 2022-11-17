@@ -8,8 +8,13 @@ from logger import *
 
 def assemble(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
     '''Assemble APK with bit and flavor and copy APK and mapping files to destination.''' 
+    # ./gradlew assembleNationalDebug -Pbuild_ndk_type=ndk_32 -Pversion_code=322 -Pversion_name=3.8.0
     assemble_command = "cd %s && gradlew clean %s -Pbuild_ndk_type=%s" \
         % (config.gradlew_location, flavor.get_gradlew_command(), bit.get_gradlew_bit_param_value())
+    if len(build_config.version_code) != 0:
+        assemble_command = assemble_command + " -Pversion_code=" + build_config.version_code
+    if len(build_config.version_name) != 0:
+        assemble_command = assemble_command + " -Pversion_name=" + build_config.version_name
     logi("Final gradlew command is [%s]" % assemble_command)
     os.system(assemble_command)
     info = _find_apk_under_given_directory(bit, flavor)

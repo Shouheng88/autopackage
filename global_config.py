@@ -8,6 +8,16 @@ from typing import Dict
 
 YAML_CONFIGURATION_FILE_PATH = "config/config.yml"
 
+class BuildConfiguration:
+    '''Build Environment Configuration.'''
+    def __init__(self):
+        # Build target script
+        self.target_script = YAML_CONFIGURATION_FILE_PATH
+        # Build APK version name
+        self.version_name = ''
+        # Build APK version code
+        self.version_code = ''
+        
 class BitConfiguration(Enum):
     '''Assemble APK package bit configuration, namely, 32 bit, 64 bit and 64 + 32 bit packages.'''
     BIT_32 = 0
@@ -56,8 +66,8 @@ class FlavorConfiguration(Enum):
         return config._apk_output_directory_national
 
 class GlobalConfig:
-    def __init__(self):
-        self._configurations = read_yaml(YAML_CONFIGURATION_FILE_PATH)
+    def parse(self):
+        self._configurations = read_yaml(build_config.target_script)
         logd(str(self._configurations))
         # Gradlew Build Configurations.
         self.gradlew_location = self._read_key("build.gradlew_location")
@@ -94,6 +104,10 @@ class GlobalConfig:
             value = value[part.strip()]
         return value
 
+# Global Build Configuration.
+build_config = BuildConfiguration()
+
+# Global Configuration From Target Script. 
 config = GlobalConfig()
 
 if __name__ == "__main__":
