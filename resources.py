@@ -12,7 +12,8 @@ ORIGINAL_COPY_TO_INFO_FILE_NAME = ".info"
 def copy_language_resources(version_name: str):
     '''Copy language resources to community repo and push to github.'''
     _copy_origin_language_resources(version_name)
-    _compare_language_resources(version_name)
+    # TODO complete the language resource diff logic
+    # _compare_language_resources(version_name)
 
 def _compare_language_resources(version_name: str):
     '''Compare current language resources with last version.'''
