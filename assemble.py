@@ -11,6 +11,8 @@ def assemble(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
     # ./gradlew assembleNationalDebug -Pbuild_ndk_type=ndk_32 -Pversion_code=322 -Pversion_name=3.8.0
     assemble_command = "cd %s && gradlew clean %s -Pbuild_ndk_type=%s" \
         % (config.gradlew_location, flavor.get_gradlew_command(), bit.get_gradlew_bit_param_value())
+    if  len(config.gradle_java_home) > 0:
+        assemble_command = assemble_command + (" -Dorg.gradle.java.home=\"%s\"" % config.gradle_java_home)
     if len(build_config.version_code) != 0:
         assemble_command = assemble_command + " -Pversion_code=" + build_config.version_code
     if len(build_config.version_name) != 0:

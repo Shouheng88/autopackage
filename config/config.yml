@@ -12,6 +12,8 @@ build:
     oversea: ../app/build/outputs/apk/international/release
   # The mapping file location. 
   mapping_file_path: ../app/mapping.txt
+  # Custom JDK path
+  gradle_java_home: 
 # APK Strength Configurations.
 strengthen:
   jiagu_360:

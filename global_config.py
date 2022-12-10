@@ -76,6 +76,7 @@ class GlobalConfig:
         self._apk_output_directory_national = self._read_key('build.apk_output_directory.national')
         self._apk_output_directory_oversea  = self._read_key('build.apk_output_directory.oversea')
         self.mapping_file_path = self._read_key("build.mapping_file_path")
+        self.gradle_java_home = self._read_key("build.gradle_java_home")
         # APK Strength Configurations.
         self.strengthen_jiagu_360_executor_path = self._read_key('strengthen.jiagu_360.executor_path')
         self.strengthen_jiagu_360_account = self._read_key('strengthen.jiagu_360.account')
