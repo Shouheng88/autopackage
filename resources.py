@@ -5,44 +5,62 @@ import shutil, os
 from logger import *
 from global_config import *
 from pathlib import Path
+from files import parse_xml
 
 ORIGINAL_COPY_TO_DIRECTORY_NAME = "original"
 ORIGINAL_COPY_TO_INFO_FILE_NAME = ".info"
 
 def copy_language_resources(version_name: str):
     '''Copy language resources to community repo and push to github.'''
+    # Compare and then copy language resources.
+    _compare_language_resources(version_name)
     _copy_origin_language_resources(version_name)
-    # TODO complete the language resource diff logic
-    # _compare_language_resources(version_name)
 
 def _compare_language_resources(version_name: str):
     '''Compare current language resources with last version.'''
     resoueces_directory = '%sapp/src/main/res/' % config.gradlew_location
-    app_language_directory = os.path.join(config.output_languages_directory, ORIGINAL_COPY_TO_DIRECTORY_NAME)
-    copy_to_info_file_path = os.path.join(app_language_directory, ORIGINAL_COPY_TO_INFO_FILE_NAME)
-    last_version = read_file(copy_to_info_file_path).strip()
-    diff_directory_name = "diff_%s_to_%s" % (last_version, version_name)
+    copied_language_directory = os.path.join(config.output_languages_directory, ORIGINAL_COPY_TO_DIRECTORY_NAME)
+    copied_to_info_file_path = os.path.join(copied_language_directory, ORIGINAL_COPY_TO_INFO_FILE_NAME)
+    last_version = read_file(copied_to_info_file_path).strip()
+    diff_directory_name = "diff_%s_to_%s.txt" % (last_version, version_name)
     diff_directory_path = os.path.join(config.output_languages_directory, diff_directory_name)
-    for name in os.listdir(app_language_directory):
-        path = os.path.join(app_language_directory, name)
-        if Path(path).is_dir:
+    for resource_file_name in os.listdir(resoueces_directory):
+        resource_file_path = os.path.join(resoueces_directory, resource_file_name)
+        if Path(resource_file_path).is_dir():
             # Compare in the child directory. Here we only compare two level directories!
-            for child_name in os.listdir(path):
-                sub_file_path = os.path.join(path, child_name)
-                if Path(sub_file_path).is_file and name.endswith('.xml'):
-                    compare_from = sub_file_path
-                    compare_to = os.path.join(resoueces_directory, name, child_name)
-                    write_to = os.path.join(diff_directory_path, name, child_name)
+            resource_directory_path = resource_file_path
+            for resource_child_file_name in os.listdir(resource_directory_path):
+                resource_child_file_path = os.path.join(resource_directory_path, resource_child_file_name)
+                if Path(resource_child_file_path).is_file() and resource_child_file_name.endswith('.xml'):
+                    compare_from = resource_child_file_path
+                    compare_to = os.path.join(copied_language_directory, resource_file_name, resource_child_file_name)
+                    write_to = os.path.join(diff_directory_path, resource_file_name, resource_child_file_name)
                     _compare_language_resource_file_and_output(compare_from, compare_to, write_to)
-        elif Path(path).is_file and name.endswith('.xml'):
-            compare_from = path
-            compare_to = os.path.join(resoueces_directory, name)
-            write_to = os.path.join(diff_directory_path, name)
+        elif Path(resource_file_path).is_file() and resource_file_name.endswith('.xml'):
+            compare_from = resource_file_path
+            compare_to = os.path.join(copied_language_directory, resource_file_name)
+            write_to = os.path.join(diff_directory_path, resource_file_name)
             _compare_language_resource_file_and_output(compare_from, compare_to, write_to)
 
 def _compare_language_resource_file_and_output(compare_from: str, compare_to: str, write_to: str):
     '''Compare language resource file and output the diff result.'''
-    pass
+    if not os.path.exists(compare_to):
+        copy_to(compare_from, write_to)
+        return
+    from_dict = parse_xml(compare_from)
+    to_dict = parse_xml(compare_to)
+    compare_result: Dict[str, List[str]] = {}
+    # Make a diff between string resources and old resources.
+    for name, value in from_dict.items():
+        if name not in to_dict or "\n".join(value) != "\n".join(to_dict[name]):
+            compare_result[name] = value
+    # Build compare result file content and write to file.
+    if len(compare_result) > 0:
+        comapre_content = ''
+        for name, value in compare_result.items():
+            comapre_content += ('=== name:\n' + name + "\n")
+            comapre_content += ('=== value:\n' + "\n".join(value) + "\n\n")
+    write_file(write_file, comapre_content)
 
 def _copy_origin_language_resources(version_name: str):
     '''Copy origin language resources.'''
@@ -56,7 +74,7 @@ def _copy_origin_language_resources(version_name: str):
         if name.startswith('values'):
             copy_from_directory = os.path.join(resoueces_directory, name)
             copy_to_directory = os.path.join(app_language_directory, name)
-            if not os.path.exists(copy_to_directory) and Path(copy_from_directory).is_dir:
+            if Path(copy_from_directory).is_dir():
                 # Delete the copy to directory if it exists before make a copy!
                 if os.path.exists(copy_to_directory):
                     shutil.rmtree(copy_to_directory)
