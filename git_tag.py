@@ -10,7 +10,7 @@ from pathlib import Path
 def add_new_tag(info: ApkInfo):
     '''Add current new tag.'''
     os.system("cd %s && git tag v%s && git push origin --tags" 
-        % (config.gradlew_location, info.version_code))
+        % (config.gradlew_location, info.version_name))
 
 def gen_git_log(info: ApkInfo):
     '''Generate git tag logs.'''
