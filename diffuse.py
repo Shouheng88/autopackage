@@ -52,7 +52,7 @@ def _get_last_version_apk_file_path(info: ApkInfo, last_version_directory: str) 
     bit_name = info.build_bit.get_name()
     flavor_name = info.build_flavor.get_name()
     for file_name in os.listdir(last_version_directory):
-        if file_name.endswith(".apk") and file_name.find(bit_name) > 0 and file_name.find(flavor_name) > 0:
+        if file_name.endswith(".apk") and file_name.find(bit_name) >= 0 and file_name.find(flavor_name) >= 0:
             return os.path.join(last_version_directory, file_name)
     return ''
 
