@@ -24,8 +24,9 @@ def _build_apk(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
     '''Execute APK build flow.'''
     info = assemble(bit, flavor)
     diff = diff_apk(info)
-    jiagu_file_directory = os.path.join(info.output_apk_directory, 'strengthen')
-    jiagu_360(info.output_apk_file_path, jiagu_file_directory)
+    if config.strengthen_enable:
+        jiagu_file_directory = os.path.join(info.output_apk_directory, 'strengthen')
+        jiagu_360(info.output_apk_file_path, jiagu_file_directory)
     mail_subject = "%s(%s,%s)" % (config.output_mail_title, flavor.get_name(), bit.get_name())
     send_email(config.output_mail_receivers, mail_subject, diff, 'html')
     return info
@@ -63,7 +64,7 @@ def _run_main():
     add_new_tag(info)
 
 if __name__ == "__main__":
-    ''' python run.py -s config/config_product.yml -v 324 -n 3.8.1.2 '''
+    ''' python run.py -s config/config_product.yml -v 336 -n 3.8.8 '''
     config_logging()
     _parse_command(sys.argv[1:])
     config.parse()

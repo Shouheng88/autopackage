@@ -16,6 +16,7 @@ build:
   gradle_java_home: 
 # APK Strength Configurations.
 strengthen:
+  enable: true
   jiagu_360:
     # 360 jiaguo executor jar file location.
     executor_path: xxxxxxxxxx

@@ -78,6 +78,7 @@ class GlobalConfig:
         self.mapping_file_path = self._read_key("build.mapping_file_path")
         self.gradle_java_home = self._read_key("build.gradle_java_home")
         # APK Strength Configurations.
+        self.strengthen_enable = self._read_key('strengthen.enable')
         self.strengthen_jiagu_360_executor_path = self._read_key('strengthen.jiagu_360.executor_path')
         self.strengthen_jiagu_360_account = self._read_key('strengthen.jiagu_360.account')
         self.strengthen_jiagu_360_password = self._read_key('strengthen.jiagu_360.password')
