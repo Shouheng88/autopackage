@@ -18,10 +18,12 @@ Options: \n\
     -h[--help]                 Help info\n\
     -c[--script]               Target build script path\n\
     -e[--version_name]         Build APK version name\n\
-    -s[--version_code]         Build APK version code"
+    -s[--version_code]         Build APK version code\n\
+    -c[--channels]             Build APK channels, split by ',' for multiple channels, for example 'oversea,national'"
 
 def _build_apk(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
     '''Execute APK build flow.'''
+    print(">>>> Beginning to build APK for flavor [%s] bit [%s]" % (flavor.get_name(), bit.get_name()))
     info = assemble(bit, flavor)
     diff = diff_apk(info)
     if config.strengthen_enable:
@@ -39,32 +41,46 @@ def _show_invalid_command(info: str):
 def _parse_command(argv):
     '''Parse command.'''
     try:
-        opts, args = getopt.getopt(argv, "-h:-s:-n:-v:", ["help", "script=", 'version_name=', 'version_code='])
+        opts, args = getopt.getopt(argv, "-h:-s:-n:-v:-c:", ["help", "script=", 'version_name=', 'version_code=', 'channels='])
     except BaseException as e:
         _show_invalid_command(str(e))
         sys.exit(2)
     for opt, arg in opts:
+        print(arg)
         if opt in ('-s', '--script'):
             build_config.target_script = arg 
         elif opt in ('-n', '--version_name'):
             build_config.version_name = arg
         elif opt in ("-v", "--version_code"):
             build_config.version_code = arg
+        elif opt in ("-c", "--channels"):
+            build_config.channels = arg
         elif opt in ('-h', '--help'):
             print(command_info)
-    logi("Build Info: target script[%s], version name[%s] and version code[%s]" 
-         % (build_config.target_script, build_config.version_name, build_config.version_code))
+    logi("Build Info: target script[%s], version name[%s], version code[%s] and channels[%s]" 
+         % (build_config.target_script, build_config.version_name, build_config.version_code, build_config.channels))
 
 def _run_main():
     '''Run main program.'''
-    info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.NATIONAL)
-    info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.OVERSEA)
+    if len(build_config.channels) == 0:
+        info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.NATIONAL)
+        info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.OVERSEA)
+    else:
+        has_national = build_config.channels.find(FlavorConfiguration.NATIONAL.get_name()) >= 0
+        has_oversea = build_config.channels.find(FlavorConfiguration.OVERSEA.get_name()) >= 0
+        if has_national:
+            info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.NATIONAL)
+        if has_oversea:
+            info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.OVERSEA)
+        if not has_national and not has_oversea:
+            print(">>>>> failed! due to no channels match!")
+            return
     copy_language_resources(info.version_name)
     gen_git_log(info)
     add_new_tag(info)
 
 if __name__ == "__main__":
-    ''' python run.py -s config/config_product.yml -v 336 -n 3.8.8 '''
+    ''' python run.py -s config/config_product.yml -v 338 -n 3.8.10 '''
     config_logging()
     _parse_command(sys.argv[1:])
     config.parse()

@@ -17,6 +17,8 @@ class BuildConfiguration:
         self.version_name = ''
         # Build APK version code
         self.version_code = ''
+        # Build APK channels.
+        self.channels = ''
         
 class BitConfiguration(Enum):
     '''Assemble APK package bit configuration, namely, 32 bit, 64 bit and 64 + 32 bit packages.'''
