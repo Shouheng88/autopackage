@@ -17,8 +17,7 @@ command_info = "\
 Options: \n\
     -h[--help]                 Help info\n\
     -c[--script]               Target build script path\n\
-    -e[--version_name]         Build APK version name\n\
-    -s[--version_code]         Build APK version code\n\
+    -v[--version]              Build APK version\n\
     -c[--channels]             Build APK channels, split by ',' for multiple channels, for example 'oversea,national'"
 
 def _build_apk(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
@@ -41,7 +40,7 @@ def _show_invalid_command(info: str):
 def _parse_command(argv):
     '''Parse command.'''
     try:
-        opts, args = getopt.getopt(argv, "-h:-s:-n:-v:-c:", ["help", "script=", 'version_name=', 'version_code=', 'channels='])
+        opts, args = getopt.getopt(argv, "-h:-s:-v:-c:", ["help", "script=", 'version=', 'channels='])
     except BaseException as e:
         _show_invalid_command(str(e))
         sys.exit(2)
@@ -49,16 +48,14 @@ def _parse_command(argv):
         print(arg)
         if opt in ('-s', '--script'):
             build_config.target_script = arg 
-        elif opt in ('-n', '--version_name'):
-            build_config.version_name = arg
-        elif opt in ("-v", "--version_code"):
-            build_config.version_code = arg
+        elif opt in ("-v", "--version"):
+            build_config.version = arg
         elif opt in ("-c", "--channels"):
             build_config.channels = arg
         elif opt in ('-h', '--help'):
             print(command_info)
-    logi("Build Info: target script[%s], version name[%s], version code[%s] and channels[%s]" 
-         % (build_config.target_script, build_config.version_name, build_config.version_code, build_config.channels))
+    logi("Build Info: target script[%s], version[%s] and channels[%s]"
+         % (build_config.target_script, build_config.version, build_config.channels))
 
 def _run_main():
     '''Run main program.'''
@@ -80,7 +77,7 @@ def _run_main():
     add_new_tag(info)
 
 if __name__ == "__main__":
-    ''' python run.py -s config/config_product.yml -v 338 -n 3.8.10 '''
+    ''' python run.py -s config/config_product.yml -v 3.8.10 '''
     config_logging()
     _parse_command(sys.argv[1:])
     config.parse()

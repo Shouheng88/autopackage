@@ -13,10 +13,8 @@ class BuildConfiguration:
     def __init__(self):
         # Build target script
         self.target_script = YAML_CONFIGURATION_FILE_PATH
-        # Build APK version name
-        self.version_name = ''
-        # Build APK version code
-        self.version_code = ''
+        # Build APK version
+        self.version = ''
         # Build APK channels.
         self.channels = ''
         
