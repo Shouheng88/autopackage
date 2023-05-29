@@ -66,8 +66,10 @@ def _run_main():
         has_national = build_config.channels.find(FlavorConfiguration.NATIONAL.get_name()) >= 0
         has_oversea = build_config.channels.find(FlavorConfiguration.OVERSEA.get_name()) >= 0
         if has_national:
+            _build_apk(BitConfiguration.BIT_32, FlavorConfiguration.NATIONAL)
             info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.NATIONAL)
         if has_oversea:
+            _build_apk(BitConfiguration.BIT_32, FlavorConfiguration.OVERSEA)
             info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.OVERSEA)
         if not has_national and not has_oversea:
             print(">>>>> failed! due to no channels match!")
