@@ -5,6 +5,7 @@ from files import *
 from apktool import *
 from global_config import *
 from logger import *
+from channel import *
 
 def assemble(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
     '''Assemble APK with bit and flavor and copy APK and mapping files to destination.''' 
@@ -22,6 +23,7 @@ def assemble(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
     info = _find_apk_under_given_directory(bit, flavor)
     _copy_apk_to_directory(info)
     _copy_mapping_file_to_directory(info, flavor)
+    _package_apk_channels(info)
     return info
 
 def _find_apk_under_given_directory(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
@@ -59,3 +61,7 @@ def _copy_mapping_file_to_directory(info: ApkInfo, flavor: FlavorConfiguration):
     mapping_file_name = "%s_mapping.txt" % flavor.get_name()
     mapping_file_copy_to = os.path.join(info.output_apk_directory, mapping_file_name)
     copy_to(config.mapping_file_path, mapping_file_copy_to)
+
+def _package_apk_channels(info: ApkInfo):
+    '''Package App with different channels.'''
+    generate_apk_channels(info.source_apk_file_path, config.output_channels, config.output_apk_directory)

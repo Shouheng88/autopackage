@@ -38,6 +38,10 @@ output:
     password: xxxxxxxxxx
   # Git log store file path.
   git_log_store_file: D:/codes/other/LeafNote-Community/GITLOG.md
+  # Channels to package.
+  channels:
+    - xxxxxxxxx
+    - xxxxxxxxx
 # APK Publish Configurations.
 publish:
   # LanZou Cloud Info.

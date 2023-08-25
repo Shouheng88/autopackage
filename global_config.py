@@ -92,6 +92,7 @@ class GlobalConfig:
         self.output_mail_user = self._read_key('output.mail.user')
         self.output_mail_password = self._read_key('output.mail.password')
         self.output_gitlog_store_file = self._read_key('output.git_log_store_file')
+        self.output_channels = self._read_key('output.channels')
         # APK Publish Configurations.
         self.publish_lanzou_username = self._read_key('publish.lanzou.username')
         self.publish_lanzou_password = self._read_key('publish.lanzou.password')
