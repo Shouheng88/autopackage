@@ -10,4 +10,4 @@ def generate_apk_channels(apk_path: str, channels: [str], output_dir):
         logi('No channels to generate, ignored ...')
         return True
     channels_str = ','.join(channels)
-    os.popen("java -jar bin/VasDolly.jar put -c \"%s\" %s %s" % (channels_str, apk_path, output_dir)).read().strip()
+    os.system("java -jar bin/VasDolly.jar put -c \"%s\" %s %s" % (channels_str, apk_path, output_dir))

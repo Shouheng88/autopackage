@@ -62,4 +62,4 @@ def _copy_mapping_file_to_directory(info: ApkInfo, flavor: FlavorConfiguration):
 
 def _package_apk_channels(info: ApkInfo):
     '''Package App with different channels.'''
-    generate_apk_channels(info.source_apk_file_path, config.output_channels, config.output_apk_directory)
+    generate_apk_channels(info.source_apk_file_path, config.output_channels, info.output_apk_directory)

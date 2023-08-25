@@ -23,10 +23,8 @@ def gen_git_log(info: ApkInfo):
 
 def _append_gitlog_to_markdown(info: ApkInfo, last_git_tag: str):
     '''Append gitlog to markdown gitlog file.'''
-    git_logs = os.popen(
-        "cd %s && git log %s..HEAD --oneline" 
-        % (config.gradlew_location, last_git_tag)
-    ).read().strip()
+    po = os.popen("cd %s && git log %s..HEAD --oneline" % (config.gradlew_location, last_git_tag))
+    git_logs = po.buffer.read().decode('utf-8').strip()
     markdown_git_logs = ('## %s \n - ' % info.version_name)  + '\n- '.join(git_logs.split('\n'))
     content = ''
     if os.path.exists(config.output_gitlog_store_file):

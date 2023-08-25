@@ -60,6 +60,7 @@ def _parse_command(argv):
 def _run_main():
     '''Run main program.'''
     if len(build_config.channels) == 0:
+        # _build_apk(BitConfiguration.BIT_32, FlavorConfiguration.NATIONAL)
         info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.NATIONAL)
         info = _build_apk(BitConfiguration.BIT_64, FlavorConfiguration.OVERSEA)
     else:
@@ -79,7 +80,7 @@ def _run_main():
     add_new_tag(info)
 
 if __name__ == "__main__":
-    ''' python run.py -s config/config_product.yml -v 3.8.10 '''
+    ''' python run.py -s config/config_product.yml -v 3.9.5 '''
     config_logging()
     _parse_command(sys.argv[1:])
     config.parse()
