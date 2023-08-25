@@ -13,6 +13,7 @@
 - 自动打 tag 并提交到远程仓库
 - 根据 Git 提交记录自动生成更新日志
 - 使用 [360 加固](https://jiagu.360.cn/#/global/index) 对上述 APK 进行加固并输出到指定的目录
+- 基于 [VasDolly](https://github.com/Tencent/VasDolly) 进行多渠道打包
 - 上传打包 APK 到蓝奏云
 - 通过 Telegram bot 将打包完成的渠道包和更新日志信息发送到 Telegram 群组
 - 完成上述操作之后使用邮件通知打包结果
