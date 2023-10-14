@@ -10,9 +10,9 @@ from channel import *
 def assemble(bit: BitConfiguration, flavor: FlavorConfiguration) -> ApkInfo:
     '''Assemble APK with bit and flavor and copy APK and mapping files to destination.''' 
     # ./gradlew assembleNationalDebug -Pbuild_ndk_type=ndk_32 -Pversion_name=3.8.0
-    assemble_command = "cd %s && gradlew clean %s -Pbuild_ndk_type=%s" \
+    assemble_command = "cd %s && ./gradlew clean %s -Pbuild_ndk_type=%s" \
         % (config.gradlew_location, flavor.get_gradlew_command(), bit.get_gradlew_bit_param_value())
-    if  len(config.gradle_java_home) > 0:
+    if len(config.gradle_java_home) > 0:
         assemble_command = assemble_command + (" -Dorg.gradle.java.home=\"%s\"" % config.gradle_java_home)
     if len(build_config.version) != 0:
         assemble_command = assemble_command + " -Pversion_name=" + build_config.version
@@ -46,7 +46,7 @@ def _copy_apk_to_directory(info: ApkInfo):
         return
     output_apk_directory = os.path.join(config.output_apk_directory, '%s_%s' % (info.version_name, info.version_code))
     if not os.path.exists(output_apk_directory):
-        os.mkdir(output_apk_directory)
+        os.makedirs(output_apk_directory)
     apk_file_base_name = os.path.basename(info.source_apk_file_path)
     output_apk_file_path = os.path.join(output_apk_directory, apk_file_base_name)
     copy_to(info.source_apk_file_path, output_apk_file_path)
