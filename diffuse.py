@@ -28,9 +28,11 @@ def _find_last_version_directory(info: ApkInfo) -> str:
     last_version = 0
     last_version_directory = ''
     output_apk_directory = config.output_apk_directory
+    logd("finding last version under %s" % (output_apk_directory))
     for directory in os.listdir(output_apk_directory):
+        logd("finding last version under %s" % (directory))
         directory_parts = directory.split('_')
-        if len(directory_parts) > 1:
+        if directory != ".DS_Store" and len(directory_parts) > 1:
             version_code = directory_parts[1]
             if not info.version_code == version_code and int(version_code) > last_version:
                 last_version = int(version_code)
