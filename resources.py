@@ -21,7 +21,9 @@ def _compare_language_resources(version_name: str):
     resoueces_directory = '%sapp/src/main/res/' % config.gradlew_location
     copied_language_directory = os.path.join(config.output_languages_directory, ORIGINAL_COPY_TO_DIRECTORY_NAME)
     copied_to_info_file_path = os.path.join(copied_language_directory, ORIGINAL_COPY_TO_INFO_FILE_NAME)
-    last_version = read_file(copied_to_info_file_path).strip()
+    last_version = version_name
+    if os.path.exists(copied_to_info_file_path):
+        last_version = read_file(copied_to_info_file_path).strip()
     diff_directory_name = "%s_to_%s" % (last_version, version_name)
     diff_directory_path = os.path.join(config.output_languages_directory, diff_directory_name)
     for resource_file_name in os.listdir(resoueces_directory):

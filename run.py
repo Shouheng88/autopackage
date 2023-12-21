@@ -80,7 +80,7 @@ def _run_main():
     add_new_tag(info)
 
 if __name__ == "__main__":
-    ''' python run.py -s config/config_product.yml -v 3.9.5 '''
+    ''' python3 run.py -s config/config_product.yml -v 4.0.3 '''
     config_logging()
     _parse_command(sys.argv[1:])
     config.parse()
